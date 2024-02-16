@@ -45,20 +45,24 @@
     </table>
 
     <script>
-       let ducks = [
-        { id: 1, type: "Mallard" },
-        { id: 2, type: "Redhead" },
-        { id: 3, type: "Decoy" },
-      ];
+      let ducks = []
+      async function getAll(){
+        let host = "http://localhost:8080";
+        response = await fetch(host + "/ducks")
+        return ducks = await response.json();
+      }
 
-      async function search() {    
+      async function search() {
+        if (ducks.length == 0) {  
+          ducks = await getAll();
+        }
 
         let duckType = document.getElementById("type").value;
         let table = document.getElementById("result");
         table.innerHTML = "";
-        
+
         for (let duck of ducks) {
-          if (!duckType || duck.type.toLowerCase() == duckType.toLowerCase()) {
+          if (!duckType || duck.type.toLowerCase() === duckType.toLowerCase()) {
             let row = document.createElement("tr");
             let cell1 = document.createElement("td");
             let id = document.createTextNode(duck.id);
@@ -72,6 +76,7 @@
           }
         }
       }
+
     </script>
   </body>
 </html>

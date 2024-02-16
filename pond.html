@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pond Page</title>
+    <link rel="stylesheet" href="pond.css">
+</head>
+<body>
+<div id="cardsContainer">
+    <!-- Cards will be dynamically inserted here -->
+</div>
+
+<script>
+async function fetchDucks() {
+    const host = "http://localhost:8080";
+    try {
+        const response = await fetch(`${host}/ducks`);
+        if (response.ok) {
+            const ducks = await response.json();
+            const container = document.getElementById('cardsContainer');
+            ducks.forEach(duck => {
+                const cardHTML = `
+                    <div class="card">
+                        <img src="${host}/ducks/${duck.id}/image" alt="${duck.type}" style="width:100%">
+                        <div class="container">
+                            <h4><b>${duck.id}</b></h4>
+                            <p>${duck.type}</p>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', cardHTML);
+            });
+        } else {
+            console.error('Failed to fetch ducks:', response.status);
+        }
+    } catch (error) {
+        console.error('Error fetching ducks:', error);
+    }
+}
+
+fetchDucks();
+</script>
+
+</body>
+</html>
